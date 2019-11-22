@@ -56,7 +56,7 @@ export default {
       axios.get(URL + "/location/all").then(v => {
         this.response = v.data;
         if (this.response != undefined) {
-          for (let { lat, lng, bus, temperature } of this.response) {
+          for (let { lat, lng, bus, temperature, co2 } of this.response) {
             //   console.log(this.response);
             //   console.log("BUS ID " + this.response[i].bus.id);
             //   console.log("LAT " + this.response[i].lat);
@@ -67,14 +67,14 @@ export default {
               marker.setLatLng([lat, lng]).update();
               marker
                 .bindPopup(
-                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                  `<h2>BUS ${bus.label}</h2><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b>  ${co2}ppm`
                 )
                 .update();
             } else {
               let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
               marker
                 .bindPopup(
-                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                  `<h2>BUS ${bus.label}</h2><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b> ${co2}ppm`
                 )
                 .openPopup();
               marker.busid = bus.id;
@@ -101,5 +101,9 @@ export default {
   height: 600px;
   width: 60%;
   display: inline-block;
+}
+
+h2 {
+  margin: 0;
 }
 </style>
