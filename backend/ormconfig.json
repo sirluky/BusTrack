@@ -1,9 +1,9 @@
 {
     "type": "mysql",
-    "host": "10.10.10.50",
+    "host": "localhost",
     "port": 3306,
-    "username": "hackathon",
-    "password": "ZuDPqfGHcQfV5SE",
+    "username": "testing",
+    "password": "minecraft",
     "database": "hackathon",
     "synchronize": true,
     "logging": true,
