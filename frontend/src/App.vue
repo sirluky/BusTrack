@@ -5,21 +5,13 @@
       <router-link to="/map">About</router-link>
       <router-link to="/login">Login</router-link>
     </div>
-    <div id="test">{{ asd }}</div>
     <router-view />
   </div>
 </template>
 <script>
 // import axios from "axios";
 
-export default {
-  data() {
-    return {
-      el: "#test",
-      asd: "loading"
-    };
-  }
-};
+export default {};
 </script>
 
 <style>

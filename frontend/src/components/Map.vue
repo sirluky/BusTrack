@@ -6,17 +6,18 @@
 import L from "leaflet";
 import axios from "axios";
 import { URL } from "@/config.js";
-import { showPosition } from "@/utils.js";
 let locationUpdate;
 let markers = [];
-let currentLocation = [49.828786, 15.528162];
-navigator.geolocation.getCurrentPosition(function(position) {
-  //   return { lat: position.coords.latitude, lng: position.coords.longitude };
-  currentLocation = [position.coords.latitude, position.coords.longitude];
-});
+// let currentLocation;
+let mymap;
+
+// navigator.geolocation.getCurrentPosition(function(position) {
+//   //   return { lat: position.coords.latitude, lng: position.coords.longitude };
+//   currentLocation = [position.coords.latitude, position.coords.longitude];
+//   console.log(currentLocation);
+// });
 //   ? navigator.geolocation.getCurrentPosition(showPosition)
 //   : {};
-console.log(currentLocation);
 
 export default {
   //props: ["data"],
@@ -24,8 +25,11 @@ export default {
     // this.$refs.map;
     //console.log(Leaflet);
 
-    // if()
-    var mymap = L.map("mapid").setView(currentLocation, 7);
+    // if (currentLocation === undefined) {
+    //   mymap = L.map("mapid").setView([49.828786, 15.528162], 7);
+    // } else mymap = L.map("mapid").setView(currentLocation, 10);
+
+    mymap = L.map("mapid").setView([49.828786, 15.528162], 7);
 
     L.tileLayer(
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
@@ -55,8 +59,12 @@ export default {
             let marker = markers.find(v => v.bus_id === bus_id);
             if (marker) {
               marker.setLatLng([lat, lng]).update();
+              marker.bindPopup(`<b>BUS1</b><br>Info placeholder`).update();
             } else {
-              let marker = L.marker([lat, lng], { title: "test" }).addTo(mymap);
+              let marker = L.marker([lat, lng]).addTo(mymap);
+              marker
+                .bindPopup(`<b>BUS ${this.bus_id}</b><br>Info placeholder`)
+                .openPopup();
               marker.bus_id = bus_id;
               markers.push(marker);
             }
