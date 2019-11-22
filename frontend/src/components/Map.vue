@@ -1,0 +1,78 @@
+<template>
+  <div id="mapid" ref="map"></div>
+</template>
+
+<script>
+import L from "leaflet";
+import axios from "axios";
+import { URL } from "@/config.js";
+let locationUpdate;
+let markers = [];
+
+let lat = 49.188;
+let lng = 16.58;
+
+export default {
+  //props: ["data"],
+  mounted() {
+    // this.$refs.map;
+    //console.log(Leaflet);
+
+    var mymap = L.map("mapid").setView([lat, lng], 16);
+
+    L.tileLayer(
+      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
+      {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: "mapbox.streets",
+        accessToken:
+          "pk.eyJ1Ijoiam9oYW5vdmVjIiwiYSI6ImNrM2E1eDM3ZzA5NmozbXFqNjIxMDVzbHYifQ.EwjFFC1Wdg9dLxODo-Zhpw"
+      }
+    ).addTo(mymap);
+
+    // marker1 = L.marker([lat, lng], { title: "test" }).addTo(mymap);
+    // marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`);
+
+    locationUpdate = setInterval(() => {
+      axios.get(URL + "/location/latestpos").then(v => {
+        this.response = v.data;
+        if (this.response != undefined) {
+          for (let { lat, lon, bus_id } of this.response) {
+            //   console.log(this.response);
+            //   console.log("BUS ID " + this.response[i].bus_id);
+            //   console.log("LAT " + this.response[i].lat);
+            //   console.log("LON " + this.response[i].lon);
+            // console.log(lat, lon);
+            let marker = markers.find(v => v.bus_id === bus_id);
+            if (marker) {
+              marker.setLatLng([lat, lng]).update();
+            } else {
+              let marker = L.marker([lat, lon], { title: "test" }).addTo(mymap);
+              marker.bus_id = bus_id;
+              markers.push(marker);
+            }
+          }
+          mymap.setView([this.response[0].lat, this.response[0].lon], 5);
+        }
+      });
+
+      //   marker1.setLatLng([lat, lng]).update();
+      //   marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`).update();
+    }, 3000);
+  },
+
+  beforeDestroy() {
+    clearInterval(locationUpdate);
+  }
+};
+</script>
+
+<style>
+#mapid {
+  height: 600px;
+  width: 60%;
+  display: inline-block;
+}
+</style>
