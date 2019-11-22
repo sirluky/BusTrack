@@ -51,6 +51,7 @@ createConnection().then(async connection => {
     // })
 
     app.use('/location', LocationRoutes);
+    app.use('/bus', BusRoutes);
 
 
     app.get('/', (req, res) => {

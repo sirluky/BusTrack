@@ -3,6 +3,7 @@ import cors from 'cors';
 import { Router } from 'express';
 import { Location } from '../entity/Location';
 import { Bus } from '../entity/Bus';
+import { MoreThanOrEqual } from 'typeorm';
 const router = Router();
 // router.use(cors);
 
@@ -26,7 +27,9 @@ router.get('/all', async (req, res) => {
     // res.send('test pls books all give me pls, great you did it !!!');
     // let books = await Book.find({ take: 10, relations: ['author'] });
     // res.json(books);
-    res.json(await Location.find({ relations: ['bus'] }));
+    let LastMinutes = 15;
+    const LastLocations = await Location.find({ relations: ['bus'], where: { createDate: MoreThanOrEqual(new Date(new Date().getTime() - LastMinutes * 1000 * 60).toISOString().slice(0, 19).replace('T', ' ')) } })
+    res.json(LastLocations.reverse());
 
 })
 

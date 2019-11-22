@@ -39,6 +39,9 @@ export class Location extends BaseEntity {
     @Column('smallint', { nullable: true })
     temperature!: number;
 
+    @Column('float', { nullable: true })
+    co2!: number;
+
     @CreateDateColumn({ type: 'timestamp', name: 'create_date', default: () => 'LOCALTIMESTAMP' })
     createDate!: string;
 

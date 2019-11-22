@@ -26,7 +26,9 @@ router.use(function timeLog(req, res, next) {
 
 
 
-router.get('/buses', async (req, res) => {
+router.get('/all', async (req, res) => {
+    // const bus = await Bus.find({ relations: ['location'] })
+
     // let busy: [{ Location_bus_id: number, Location_bus_lat: number, Location_bus_lng: number }] = await Location.createQueryBuilder().orderBy('id', "DESC").groupBy('bus_id').execute();
 
     // busy = busy.map(bus => ({
@@ -39,7 +41,7 @@ router.get('/buses', async (req, res) => {
     // console.log(bus);
     // res.json(busy);
 
-    // res.json(await Bus.find());
+    // res.json(bus);
 
 
 })
