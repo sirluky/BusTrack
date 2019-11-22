@@ -1,0 +1,22 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "testing",
+    "password": "minecraft",
+    "database": "knihovna",
+    "synchronize": true,
+    "logging": true,
+    "entities": [
+        "src/entity/**/*.ts"
+    ],
+    "migrations": [
+        "src/migration/**/*.ts"
+    ],
+    "subscribers": [
+        "src/subscriber/**/*.ts"
+    ],
+    "extra": {
+        "charset": "utf8mb4_unicode_ci"
+    }
+}
