@@ -6,11 +6,17 @@
 import L from "leaflet";
 import axios from "axios";
 import { URL } from "@/config.js";
+import { showPosition } from "@/utils.js";
 let locationUpdate;
 let markers = [];
-
-let lat = 49.188;
-let lng = 16.58;
+let currentLocation = [49.828786, 15.528162];
+navigator.geolocation.getCurrentPosition(function(position) {
+  //   return { lat: position.coords.latitude, lng: position.coords.longitude };
+  currentLocation = [position.coords.latitude, position.coords.longitude];
+});
+//   ? navigator.geolocation.getCurrentPosition(showPosition)
+//   : {};
+console.log(currentLocation);
 
 export default {
   //props: ["data"],
@@ -18,7 +24,8 @@ export default {
     // this.$refs.map;
     //console.log(Leaflet);
 
-    var mymap = L.map("mapid").setView([lat, lng], 16);
+    // if()
+    var mymap = L.map("mapid").setView(currentLocation, 7);
 
     L.tileLayer(
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
