@@ -14,7 +14,7 @@ export function MqttStart() {
         })
     })
 
-    client.on('message', function (topic, message) {
+    client.on('message', async function (topic, message) {
         switch (topic) {
             case 'GPS':
                 // let bus = new Bus()
@@ -26,12 +26,22 @@ export function MqttStart() {
                 const json = JSON.parse(message.toString());
                 console.log();
 
-                const loc = new Location();
-                const { latitude, longitude, altitude } = json.payload_fields;
+                const { latitude, longitude, altitude, temperature } = json.payload_fields;
+
                 console.log(latitude, longitude, altitude);
+                // let bus = new Bus()
+                let loc = new Location();
+                // bus.name = json.dev_id;
+                // bus.lokace = new Location();
                 loc.lat = latitude;
                 loc.lng = longitude;
                 loc.alt = altitude;
+                loc.temperature = temperature
+                let bus = await Bus.findOneOrFail({ where: { name: json.dev_id } });
+                loc.bus = bus;
+
+
+
                 loc.save();
 
                 // console.log('location saved')

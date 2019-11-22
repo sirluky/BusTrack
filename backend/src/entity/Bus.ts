@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BaseEntity, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BaseEntity, OneToMany, JoinColumn } from "typeorm";
 import { Location } from "./Location";
 
 
@@ -9,11 +9,16 @@ export class Bus extends BaseEntity {
     id!: number;
 
 
-    @OneToMany(type => Location, loc => loc.bus_id, { onDelete: "CASCADE" })
-    lokace!: Location[]
+    @OneToMany(type => Location, loc => loc.bus)
+    location!: Location[]
 
 
     @Column('varchar', { length: 50, nullable: true })
+    label!: string;
+
+
+
+    @Column('varchar', { length: 50, nullable: false })
     name!: string;
 
 

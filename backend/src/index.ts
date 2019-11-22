@@ -8,6 +8,7 @@ import expressSessions from 'express-session';
 import { Location } from "./entity/Location";
 import { MqttStart } from "./DataReceiver";
 import { LocationRoutes } from "./routes/location";
+import { BusRoutes } from "./routes/bus";
 
 
 // console.log('hello')
@@ -43,11 +44,11 @@ createConnection().then(async connection => {
         res.send("mytoken123");
     })
 
-    app.delete('/:param', (req, res) => {
-        const id = req.params.id;
-        console.log(id);
-        res.send(`Param:${id} has been...`)
-    })
+    // app.delete('/:param', (req, res) => {
+    //     const id = req.params.id;
+    //     console.log(id);
+    //     res.send(`Param:${id} has been...`)
+    // })
 
     app.use('/location', LocationRoutes);
 
