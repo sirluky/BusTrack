@@ -11,6 +11,12 @@ let markers = [];
 // let currentLocation;
 let mymap;
 
+const busIcon = L.icon({
+  iconUrl: "/img/busIcon.png",
+  iconSize: [16, 19],
+  iconAnchor: [8, 0]
+});
+
 // navigator.geolocation.getCurrentPosition(function(position) {
 //   //   return { lat: position.coords.latitude, lng: position.coords.longitude };
 //   currentLocation = [position.coords.latitude, position.coords.longitude];
@@ -29,14 +35,14 @@ export default {
     //   mymap = L.map("mapid").setView([49.828786, 15.528162], 7);
     // } else mymap = L.map("mapid").setView(currentLocation, 10);
 
-    mymap = L.map("mapid").setView([49.828786, 15.528162], 7);
+    mymap = L.map("mapid").setView([49.19176, 16.605804], 12);
 
     L.tileLayer(
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
       {
         attribution:
           'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 32,
+        maxZoom: 16,
         id: "mapbox.streets",
         accessToken:
           "pk.eyJ1Ijoiam9oYW5vdmVjIiwiYSI6ImNrM2E1eDM3ZzA5NmozbXFqNjIxMDVzbHYifQ.EwjFFC1Wdg9dLxODo-Zhpw"
@@ -50,22 +56,28 @@ export default {
       axios.get(URL + "/location/all").then(v => {
         this.response = v.data;
         if (this.response != undefined) {
-          for (let { lat, lng, bus_id } of this.response) {
+          for (let { lat, lng, bus, temperature } of this.response) {
             //   console.log(this.response);
-            //   console.log("BUS ID " + this.response[i].bus_id);
+            //   console.log("BUS ID " + this.response[i].bus.id);
             //   console.log("LAT " + this.response[i].lat);
             //   console.log("lng " + this.response[i].lng);
             // console.log(lat, lng);
-            let marker = markers.find(v => v.bus_id === bus_id);
+            let marker = markers.find(v => v.busid === bus.id);
             if (marker) {
               marker.setLatLng([lat, lng]).update();
-              marker.bindPopup(`<b>BUS1</b><br>Info placeholder`).update();
-            } else {
-              let marker = L.marker([lat, lng]).addTo(mymap);
               marker
-                .bindPopup(`<b>BUS ${this.bus_id}</b><br>Info placeholder`)
+                .bindPopup(
+                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                )
+                .update();
+            } else {
+              let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
+              marker
+                .bindPopup(
+                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                )
                 .openPopup();
-              marker.bus_id = bus_id;
+              marker.busid = bus.id;
               markers.push(marker);
             }
           }
