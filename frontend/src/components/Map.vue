@@ -25,7 +25,7 @@ export default {
       {
         attribution:
           'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
+        maxZoom: 32,
         id: "mapbox.streets",
         accessToken:
           "pk.eyJ1Ijoiam9oYW5vdmVjIiwiYSI6ImNrM2E1eDM3ZzA5NmozbXFqNjIxMDVzbHYifQ.EwjFFC1Wdg9dLxODo-Zhpw"
@@ -36,25 +36,25 @@ export default {
     // marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`);
 
     locationUpdate = setInterval(() => {
-      axios.get(URL + "/location/latestpos").then(v => {
+      axios.get(URL + "/location/all").then(v => {
         this.response = v.data;
         if (this.response != undefined) {
-          for (let { lat, lon, bus_id } of this.response) {
+          for (let { lat, lng, bus_id } of this.response) {
             //   console.log(this.response);
             //   console.log("BUS ID " + this.response[i].bus_id);
             //   console.log("LAT " + this.response[i].lat);
-            //   console.log("LON " + this.response[i].lon);
-            // console.log(lat, lon);
+            //   console.log("lng " + this.response[i].lng);
+            // console.log(lat, lng);
             let marker = markers.find(v => v.bus_id === bus_id);
             if (marker) {
               marker.setLatLng([lat, lng]).update();
             } else {
-              let marker = L.marker([lat, lon], { title: "test" }).addTo(mymap);
+              let marker = L.marker([lat, lng], { title: "test" }).addTo(mymap);
               marker.bus_id = bus_id;
               markers.push(marker);
             }
           }
-          mymap.setView([this.response[0].lat, this.response[0].lon], 5);
+          //   mymap.setView([this.response[0].lat, this.response[0].lng], 5);
         }
       });
 
