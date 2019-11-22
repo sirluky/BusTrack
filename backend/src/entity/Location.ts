@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Bus } from "./Bus";
 
 
 @Entity()
@@ -7,8 +8,19 @@ export class Location extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column('int', { default: 0, nullable: true })
-    bus_id!: number
+    // @Column('int', { default: 1, nullable: true })
+    // bus_id!: number
+
+    @ManyToOne(type => Bus, bus => bus.location)
+    bus!: Bus;
+
+    // @JoinTable({
+    //     name: "bus", // table name for the junction table of this relation
+    //     joinColumn: {
+    //         referencedColumnName: "id"
+    //     }
+    // })
+
     // @OneToMany(type => Location)
     // bus: Location
 
@@ -23,6 +35,9 @@ export class Location extends BaseEntity {
 
     @Column('double')
     alt!: number;
+
+    @Column('smallint', { nullable: true })
+    temperature!: number;
 
     @CreateDateColumn({ type: 'timestamp', name: 'create_date', default: () => 'LOCALTIMESTAMP' })
     createDate!: string;

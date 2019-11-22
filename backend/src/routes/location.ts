@@ -26,18 +26,19 @@ router.get('/all', async (req, res) => {
     // res.send('test pls books all give me pls, great you did it !!!');
     // let books = await Book.find({ take: 10, relations: ['author'] });
     // res.json(books);
-    res.json(await Location.find());
+    res.json(await Location.find({ relations: ['bus'] }));
 
 })
 
 router.get('/latestpos', async (req, res) => {
-    let busy: [{ Location_bus_id: number, Location_bus_lat: number, Location_bus_lng: number }] = await Location.createQueryBuilder().orderBy('id', "DESC").groupBy('bus_id').execute();
-
+    let busy: [{ Location_bus_id: number, Location_bus_lat: number, Location_bus_lng: number, Location_createDate: Date }] = await Location.createQueryBuilder().orderBy('create_date', "DESC").where('create_date = :from_time', { from_time: new Date().getTime() - 100000000 }).execute();
+    console.log(busy)
     busy = busy.map(bus => ({
         "bus_id": bus.Location_bus_id,
         lat: bus.Location_lat,
         lng: bus.Location_lng,
-        id: bus.Location_id
+        id: bus.Location_id,
+        createDate: bus.Location_create_date
     }))
 
     // console.log(bus);
