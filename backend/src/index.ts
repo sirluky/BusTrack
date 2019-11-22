@@ -5,6 +5,9 @@ import bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 import cookieParser from 'cookie-parser';
 import expressSessions from 'express-session';
+import { Location } from "./entity/Location";
+import { MqttStart } from "./DataReceiver";
+import { LocationRoutes } from "./routes/location";
 
 
 // console.log('hello')
@@ -12,6 +15,12 @@ const app = express();
 const PORT = 3000;
 
 createConnection().then(async connection => {
+    // let loc = new Location();
+    // loc.lat = 123.1236789;
+    // loc.lng = 321.1236789;
+
+    // loc.save();
+
     app.use(cookieParser());
 
     app.use(expressSessions({
@@ -39,6 +48,16 @@ createConnection().then(async connection => {
         console.log(id);
         res.send(`Param:${id} has been...`)
     })
+
+    app.use('/location', LocationRoutes);
+
+
+    app.get('/', (req, res) => {
+        res.send('Hello there on my BUS API');
+    })
+
+    app.post('/')
+    MqttStart();
 
 })
 
