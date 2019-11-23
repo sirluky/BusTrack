@@ -7,7 +7,7 @@ export function MqttStart() {
     var client = mqtt.connect('mqtt://90.177.25.227')
 
     client.on('connect', function () {
-        client.subscribe('GPS', function (err) {
+        client.subscribe('gps', function (err) {
             if (!err) {
                 // client.publish('GPS', 'Hello mqtt')
             }
@@ -16,7 +16,7 @@ export function MqttStart() {
 
     client.on('message', async function (topic, message) {
         switch (topic) {
-            case 'GPS':
+            case 'gps':
                 // let bus = new Bus()
                 // bus.lokace = 
                 // console.log(`GPS is : ${message.toString()}`);
@@ -24,25 +24,25 @@ export function MqttStart() {
                 // loc.bus_id = 1;
                 // loc.save()
                 const json = JSON.parse(message.toString());
-                console.log();
+                console.log(json, 'json data')
 
-                const { latitude, longitude, altitude, temperature } = json.payload_fields;
+                // const { latitude, longitude, altitude, temperature } = json.payload_fields;
+                // console.log(latitude, longitude, altitude, 'New Location');
+                // // let bus = new Bus()
+                // let loc = new Location();
 
-                console.log(latitude, longitude, altitude);
-                // let bus = new Bus()
-                let loc = new Location();
-                // bus.name = json.dev_id;
-                // bus.lokace = new Location();
-                loc.lat = latitude;
-                loc.lng = longitude;
-                loc.alt = altitude;
-                loc.temperature = temperature
-                let bus = await Bus.findOneOrFail({ where: { name: json.dev_id } });
-                loc.bus = bus;
+                // // bus.name = json.dev_id;
+                // // bus.lokace = new Location();
+                // loc.lat = latitude;
+                // loc.lng = longitude;
+                // loc.alt = altitude;
+                // loc.temperature = temperature
+                // let bus = await Bus.findOneOrFail({ where: { name: json.dev_id } });
+                // loc.bus = bus;
 
 
 
-                loc.save();
+                // loc.save();
 
                 // console.log('location saved')
                 break;
