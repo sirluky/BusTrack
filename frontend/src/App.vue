@@ -13,9 +13,18 @@
   </div>
 </template>
 <script>
-// import axios from "axios";
+import { URL } from "@/config.js";
+import axios from "axios";
 
-export default {};
+export default {
+  mounted() {
+    setInterval(() => {
+      axios.get(URL + "/location/all").then(v => {
+        this.$store.commit("updatebuses", v.data);
+      });
+    }, 3000);
+  }
+};
 </script>
 
 <style>
@@ -34,5 +43,9 @@ export default {};
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+ul {
+  margin: 0;
 }
 </style>

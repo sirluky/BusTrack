@@ -1,5 +1,8 @@
 <template>
-  <div class="rounded" id="mapid" ref="map"></div>
+  <div>
+    <h1>Current location of buses</h1>
+    <div class="rounded" id="mapid" ref="map"></div>
+  </div>
 </template>
 
 <script>
@@ -8,9 +11,11 @@ import axios from "axios";
 import { URL } from "@/config.js";
 let locationUpdate;
 let markers = [];
-// let history = [];
+let circles = [];
 // let currentLocation;
 let mymap;
+let color;
+let fill;
 
 const busIcon = L.icon({
   iconUrl: "/img/busIcon.png",
@@ -71,6 +76,26 @@ export default {
                   `<h3 class="h5 font-weight-bold">BUS ${bus.label}</h3><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b>  ${co2}ppm`
                 )
                 .update();
+
+              if (co2 < 1000) {
+                color = "green";
+                fill = "#8aff8a";
+              } else if (1000 <= co2 <= 5000) {
+                color = "yellow";
+                fill = "##f5ff52";
+              } else if (co2 > 5000) {
+                color = "red";
+                fill = "##ff6363";
+              }
+
+              let circle = L.circle([lat, lng], {
+                color: color,
+                fillcolor: fill,
+                opacity: 0.1,
+                radius: 150
+              }).addTo(mymap);
+
+              circles.push(circle);
             } else {
               let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
               marker
@@ -80,6 +105,26 @@ export default {
                 .openPopup();
               marker.busid = bus.id;
               markers.push(marker);
+
+              if (co2 < 1000) {
+                color = "green";
+                fill = "#8aff8a";
+              } else if (1000 <= co2 <= 5000) {
+                color = "yellow";
+                fill = "##f5ff52";
+              } else if (co2 > 5000) {
+                color = "red";
+                fill = "##ff6363";
+              }
+
+              let circle = L.circle([lat, lng], {
+                color: color,
+                fillcolor: fill,
+                opacity: 0.1,
+                radius: 150
+              }).addTo(mymap);
+
+              circles.push(circle);
             }
           }
           //   mymap.setView([this.response[0].lat, this.response[0].lng], 5);
@@ -87,7 +132,7 @@ export default {
       });
       //   marker1.setLatLng([lat, lng]).update();
       //   marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`).update();
-    }, 3000);
+    }, 10000);
   },
 
   beforeDestroy() {
