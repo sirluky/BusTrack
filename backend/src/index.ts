@@ -9,6 +9,7 @@ import { Location } from "./entity/Location";
 import { MqttStart } from "./DataReceiver";
 import { LocationRoutes } from "./routes/location";
 import { BusRoutes } from "./routes/bus";
+import { Faker } from "./DataFaker";
 
 
 // console.log('hello')
@@ -60,6 +61,7 @@ createConnection().then(async connection => {
 
     app.post('/')
     MqttStart();
+    Faker();
 
 })
 

@@ -36,7 +36,7 @@ export class Location extends BaseEntity {
     @Column('double')
     alt!: number;
 
-    @Column('smallint', { nullable: true })
+    @Column('float', { nullable: true })
     temperature!: number;
 
     @Column('float', { nullable: true })
