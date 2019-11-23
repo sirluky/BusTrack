@@ -95,6 +95,10 @@ export default {
                 radius: 150
               }).addTo(mymap);
 
+              circle.bindPopup(
+                `<h3 class="h5 font-weight-bold">CO2:</h3> ${co2}`
+              );
+
               circles.push(circle);
             } else {
               let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
@@ -124,7 +128,15 @@ export default {
                 radius: 150
               }).addTo(mymap);
 
+              circle.bindPopup(
+                `<h3 class="h5 font-weight-bold">CO2:</h3> ${co2}`
+              );
               circles.push(circle);
+
+              if (circles.length > 3) {
+                mymap.removeLayer(circles[0]);
+                circles.splice(0, 1);
+              }
             }
           }
           //   mymap.setView([this.response[0].lat, this.response[0].lng], 5);
@@ -132,7 +144,7 @@ export default {
       });
       //   marker1.setLatLng([lat, lng]).update();
       //   marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`).update();
-    }, 10000);
+    }, 5000);
   },
 
   beforeDestroy() {

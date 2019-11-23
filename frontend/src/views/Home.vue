@@ -9,16 +9,16 @@
           <th>Temperature</th>
         </tr>
         <tr v-for="bus in buses" :key="bus.id">
-          <td><img src="/img/busIconWhite.png" alt="" /></td>
+          <td>
+            <img src="/img/busIconWhite.png" alt />
+          </td>
           <td>{{ bus.bus.name }}</td>
 
+          <td>{{ bus.co2 }}</td>
           <td>
-            {{ bus.co2 }}
-          </td>
-          <td>
+            <!-- bus.temperature || -->
             {{
-              bus.temperature ||
-                Math.floor((Math.random() * 10 + 20) * 100) / 100
+            Math.floor((Math.random() * 10 + 20) * 100) / 100
             }}
           </td>
         </tr>
@@ -29,13 +29,26 @@
 
 <script>
 // @ is an alias to /src
+// import _ from "lodash";
 
 export default {
   name: "home",
   components: {},
   computed: {
     buses() {
-      return this.$store.state.buses;
+      let buses = this.$store.state.buses;
+      buses = buses.map(b => ({ ...b, busid: b.bus.id }));
+      // console.log();
+      // buses = _.sortBy(_.sortBy(buses, "createDate").reverse(), "busid");
+      // buses.reduce((v, p = []) => {
+      //   if (v.busid !== p[p.length - 1].busid) {
+      //     p.push(v);
+      //   }
+      //   return p;
+      // });
+      // console.log(buses);
+
+      return buses;
     }
   }
 };
