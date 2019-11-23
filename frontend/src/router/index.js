@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
 import Map from "../views/Map.vue";
+import Chart from "../views/Chart.vue";
 
 Vue.use(VueRouter);
 
@@ -21,9 +21,9 @@ const routes = [
     component: Map
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login
+    path: "/chart",
+    name: "chart",
+    component: Chart
   }
 ];
 

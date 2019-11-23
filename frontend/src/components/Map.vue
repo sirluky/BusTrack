@@ -1,5 +1,8 @@
 <template>
-  <div id="mapid" ref="map"></div>
+  <div>
+    <h1>Current location of buses</h1>
+    <div class="rounded" id="mapid" ref="map"></div>
+  </div>
 </template>
 
 <script>
@@ -8,8 +11,11 @@ import axios from "axios";
 import { URL } from "@/config.js";
 let locationUpdate;
 let markers = [];
+let circles = [];
 // let currentLocation;
 let mymap;
+let color;
+let fill;
 
 const busIcon = L.icon({
   iconUrl: "/img/busIcon.png",
@@ -56,7 +62,7 @@ export default {
       axios.get(URL + "/location/all").then(v => {
         this.response = v.data;
         if (this.response != undefined) {
-          for (let { lat, lng, bus, temperature } of this.response) {
+          for (let { lat, lng, bus, temperature, co2 } of this.response) {
             //   console.log(this.response);
             //   console.log("BUS ID " + this.response[i].bus.id);
             //   console.log("LAT " + this.response[i].lat);
@@ -67,27 +73,78 @@ export default {
               marker.setLatLng([lat, lng]).update();
               marker
                 .bindPopup(
-                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                  `<h3 class="h5 font-weight-bold">BUS ${bus.label}</h3><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b>  ${co2}ppm`
                 )
                 .update();
+
+              if (co2 < 1000) {
+                color = "green";
+                fill = "#8aff8a";
+              } else if (1000 <= co2 <= 5000) {
+                color = "yellow";
+                fill = "##f5ff52";
+              } else if (co2 > 5000) {
+                color = "red";
+                fill = "##ff6363";
+              }
+
+              let circle = L.circle([lat, lng], {
+                color: color,
+                fillcolor: fill,
+                opacity: 0.1,
+                radius: 150
+              }).addTo(mymap);
+
+              circle.bindPopup(
+                `<h3 class="h5 font-weight-bold">CO2:</h3> ${co2}`
+              );
+
+              circles.push(circle);
             } else {
               let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
               marker
                 .bindPopup(
-                  `<b>BUS ${bus.label}</b><br>Temperature ${temperature}°C<br>`
+                  `<h3 class="h5 font-weight-bold">BUS ${bus.label}</h3><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b> ${co2}ppm`
                 )
                 .openPopup();
               marker.busid = bus.id;
               markers.push(marker);
+
+              if (co2 < 1000) {
+                color = "green";
+                fill = "#8aff8a";
+              } else if (1000 <= co2 <= 5000) {
+                color = "yellow";
+                fill = "##f5ff52";
+              } else if (co2 > 5000) {
+                color = "red";
+                fill = "##ff6363";
+              }
+
+              let circle = L.circle([lat, lng], {
+                color: color,
+                fillcolor: fill,
+                opacity: 0.1,
+                radius: 150
+              }).addTo(mymap);
+
+              circle.bindPopup(
+                `<h3 class="h5 font-weight-bold">CO2:</h3> ${co2}`
+              );
+              circles.push(circle);
+
+              if (circles.length > 3) {
+                mymap.removeLayer(circles[0]);
+                circles.splice(0, 1);
+              }
             }
           }
           //   mymap.setView([this.response[0].lat, this.response[0].lng], 5);
         }
       });
-
       //   marker1.setLatLng([lat, lng]).update();
       //   marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`).update();
-    }, 3000);
+    }, 5000);
   },
 
   beforeDestroy() {
@@ -101,5 +158,9 @@ export default {
   height: 600px;
   width: 60%;
   display: inline-block;
+}
+
+h3 {
+  margin: 0;
 }
 </style>
