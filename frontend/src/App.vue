@@ -1,9 +1,13 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/map">About</router-link>
-      <router-link to="/login">Login</router-link>
+  <div id="app" class="bg-secondary text-white">
+    <div id="nav d-flex flex-row " class="p-3 mb-2 bg-primary text-white">
+      <p class="h2 font-weight-bold">BUS TRACKER</p>
+      <router-link to="/">
+        <button type="button" class="btn btn-secondary mr-2 ml-2">Home</button>
+      </router-link>
+      <router-link to="/map">
+        <button type="button" class="btn btn-secondary mr-2 ml-2">Map</button>
+      </router-link>
     </div>
     <router-view />
   </div>
@@ -21,10 +25,6 @@ export default {};
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
 }
 
 #nav a {

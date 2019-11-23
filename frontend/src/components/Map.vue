@@ -1,5 +1,5 @@
 <template>
-  <div id="mapid" ref="map"></div>
+  <div class="rounded" id="mapid" ref="map"></div>
 </template>
 
 <script>
@@ -8,6 +8,7 @@ import axios from "axios";
 import { URL } from "@/config.js";
 let locationUpdate;
 let markers = [];
+// let history = [];
 // let currentLocation;
 let mymap;
 
@@ -67,14 +68,14 @@ export default {
               marker.setLatLng([lat, lng]).update();
               marker
                 .bindPopup(
-                  `<h2>BUS ${bus.label}</h2><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b>  ${co2}ppm`
+                  `<h3 class="h5 font-weight-bold">BUS ${bus.label}</h3><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b>  ${co2}ppm`
                 )
                 .update();
             } else {
               let marker = L.marker([lat, lng], { icon: busIcon }).addTo(mymap);
               marker
                 .bindPopup(
-                  `<h2>BUS ${bus.label}</h2><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b> ${co2}ppm`
+                  `<h3 class="h5 font-weight-bold">BUS ${bus.label}</h3><b>Temperature:</b> ${temperature}°C<br><b>CO2:</b> ${co2}ppm`
                 )
                 .openPopup();
               marker.busid = bus.id;
@@ -84,7 +85,6 @@ export default {
           //   mymap.setView([this.response[0].lat, this.response[0].lng], 5);
         }
       });
-
       //   marker1.setLatLng([lat, lng]).update();
       //   marker1.bindPopup(`<b>BUS1</b><br>placeholder ${this.response}`).update();
     }, 3000);
@@ -103,7 +103,7 @@ export default {
   display: inline-block;
 }
 
-h2 {
+h3 {
   margin: 0;
 }
 </style>
